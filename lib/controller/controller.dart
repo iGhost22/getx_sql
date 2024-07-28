@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:get/get.dart';
+import 'package:getx_sqflite/model/todo_model.dart';
 
 class SQLController extends GetxController {
   @override
@@ -52,9 +54,16 @@ class SQLController extends GetxController {
     );
   }
 
+  List<TodoModel> list = [];
+
   void getAllData() async {
     var allData = await database.query("todo");
-    print(allData);
+    for (var i in allData) {
+      debugPrint(i.toString());
+      list.add(TodoModel.fromJson(i));
+    }
+    debugPrint(list.length.toString());
+    debugPrint(allData.toString());
     update();
   }
 
