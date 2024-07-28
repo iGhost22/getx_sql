@@ -20,13 +20,16 @@ class HomeScreen extends StatelessWidget {
             },
             icon: const Icon(Icons.remove),
           ),
+          IconButton(
+            onPressed: () {
+              controller.insertData();
+            },
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
       body: const Center(
-        child: Text(
-          'Welcome to Home Screen',
-          style: TextStyle(fontSize: 24),
-        ),
+        child: Text(' '),
       ),
     );
   }
