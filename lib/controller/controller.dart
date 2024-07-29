@@ -57,30 +57,85 @@ class SQLController extends GetxController {
   List<TodoModel> list = [];
 
   void getAllData() async {
+    list = [];
     var allData = await database.query("todo");
     for (var i in allData) {
-      debugPrint(i.toString());
       list.add(TodoModel.fromJson(i));
     }
-    debugPrint(list.length.toString());
-    debugPrint(allData.toString());
+    // debugPrint(allData.toString());
     update();
   }
 
-  void insertData() async {
-    var insert = await database.insert("todo", {
-      "title": "go",
-      "description": "go to school",
-      "time": "10:00",
-      "favorite": 0,
-      "completed": 0,
-    });
-    debugPrint("$insert data inserted");
+  void insertData({
+    required String title,
+    required String description,
+    required String time,
+    // required int favorite,
+    // required int completed,
+  }) async {
+    try {
+      var insert = await database.insert("todo", {
+        "title": title,
+        "description": description,
+        "time": time,
+        "favorite": 0,
+        "completed": 0,
+      });
+      Get.back();
+      debugPrint("$insert data inserted");
+      getAllData();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    // update();
+  }
+
+  bool updateTaskData = false;
+
+  void updateData({
+    required String title,
+    required String description,
+    required String time,
+    required int id,
+  }) async {
+    try {
+      var updateData = await database.update(
+        "todo",
+        {
+          "title": title,
+          "description": description,
+          "time": time,
+          "favorite": 1,
+          "completed": 1,
+        },
+        where: 'id = $id',
+      );
+      Get.back();
+      debugPrint("Update item ${updateData}");
+      getAllData();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    // var updateData = await database.update(
+    //   "todo",
+    //   {
+    //     "title": title,
+    //     "description": description,
+    //     "time": time,
+    //     "favorite": 1,
+    //     "completed": 1,
+    //   },
+    //   where: 'id = $id',
+    // );
+    // Get.back();
+    // debugPrint("Update item ${updateData}");
+    // getAllData();
+  }
+
+  void deleteData({required int id}) async {
+    var deletedItem = await database.delete("todo", where: "id = $id");
+    debugPrint("Deleted item ${deletedItem}");
     getAllData();
-    update();
   }
-
-  void updateData() {}
-
-  void deleteData() {}
 }
